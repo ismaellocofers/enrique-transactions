@@ -1,0 +1,19 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+steps:
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - builds
+  - submit
+  - --tag=${_REGISTRY_PATH}/${_IMAGE_NAME}
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args: 
+  - gcloud
+  - run
+  - deploy
+  - inference-transactions 
+  - --image=${_REGISTRY_PATH}/${_IMAGE_NAME}
+  - --region=${_REGION}
+  - --set-env-vars=GCP_PROJECT=${_PROJECT_ID},OUTPUT_TOPIC=${_OUTPUT_TOPIC}
