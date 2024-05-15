@@ -47,11 +47,12 @@ def index():
 
 
 
+
 def publish_response(message):
     """Publishes processed message to Pub/Sub topic."""
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(GCP_PROJECT, OUTPUT_TOPIC)
-    message_bytes = json.dumps(message, default=lambda o: int(o) if isinstance(o, np.integer) else o).encode("utf-8")
+    message_bytes = json.dumps(message).encode("utf-8")
     publish_future = publisher.publish(topic_path, data=message_bytes)
     publish_future.result()
     logging.info(f"Published message to {topic_path}.")
